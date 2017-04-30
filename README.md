@@ -35,9 +35,9 @@ allbody(str)	allbody是我自己拼接的，尽量像直接返回的socket
 
 下面说说http和httpraw的区别
 
-httpraw有三个参数(url, raw, timeout=3),和hackhttp一样，raw里面可以直接复制burpsuite抓到的包，和hackhttp不同的地方就是，MicroCore直接用的socket发送数据，比httplib还要底层，这样对用户发送的包也有比较严格的限制，比如content-length，用户要自己手动计算字节数
+	httpraw有三个参数(url, raw, timeout=3),和hackhttp一样，raw里面可以直接复制burpsuite抓到的包，和hackhttp不同的地方就是，MicroCore直接用的socket发送数据，比httplib还要底层，这样对用户发送的包也有比较严格的限制，比如content-length，用户要自己手动计算字节数
 
-http有六个参数(url, post=None, raw=None, headers={}, method=None, cookies={},method=None(通过post或raw判断，默认为GET))，raw参数同样可以发送包，和hackhttp的区别在于，这个raw不是通过调用httpraw的方法实现的，而是自己处理的，会解析请求行，请求头，等等的字段，然后通过httplib来请求
+	http有六个参数(url, post=None, raw=None, headers={}, method=None, cookies={},method=None(通过post或raw判断，默认为GET))，raw参数同样可以发送包，和hackhttp的区别在于，这个raw不是通过调用httpraw的方法实现的，而是自己处理的，会解析请求行，请求头，等等的字段，然后通过httplib来请求
 
 
 
@@ -54,43 +54,43 @@ MicroCore没有使用线程池，因为我比较菜，没有深刻理解线程�
 下面给几个栗子，方便大家理解我的辣鸡框架，也欢迎大家提出宝贵的意见或建议
 
 
-mm = MicroCore.Microhttp()
-code,headers,body,jumpurl,allbody=mm.http('http://www.baidu.com')
-请求数据:
-GET / HTTP/1.1
-Connection: Keep-Alive
-Accept-Encoding: gzip, deflate
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.71 Safari/537.36
-
-数据结束
-
-
-
-
-code,headers,body,jumpurl,allbody=mm.http("http://www.baidu.com",headers={'User-Agent': '6666666666'},cookies={'a':'b'},raw='''GET /index.html HTTP/1.1
-action: 123456''')
-请求数据:
-GET /index.html HTTP/1.1
-action: 123456
-Connection: Keep-Alive
-Cookie: a=b
-Accept-Encoding: gzip, deflate
-User-Agent: 6666666666
-
-数据结束
-注：该方法优先使用raw的数据，比如headers里面写了User-Agent，raw里面也写了该请求头，优先使用raw里面的，我也不知道哪个是对的，只是跟着感觉走，大概是这样比较合理，如果post里面写了数据，会被raw里面的数据覆盖
-另外请注意此方法请求的报文，被raw改了！！！
+	mm = MicroCore.Microhttp()
+	code,headers,body,jumpurl,allbody=mm.http('http://www.baidu.com')
+	请求数据:
+	GET / HTTP/1.1
+	Connection: Keep-Alive
+	Accept-Encoding: gzip, deflate
+	User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.71 Safari/537.36
+	
+	数据结束
 
 
 
 
-code,headers,body,jumpurl,allbody=mm.httpraw('http://www.baidu.com','GET / HTTP/1.1\r\n\r\n')
-请求数据
-GET / HTTP/1.1
+	code,headers,body,jumpurl,allbody=mm.http("http://www.baidu.com",headers={'User-Agent': '6666666666'},cookies={'a':'b'},raw='''GET /index.html HTTP/1.1
+	action: 123456''')
+	请求数据:
+	GET /index.html HTTP/1.1
+	action: 123456
+	Connection: Keep-Alive
+	Cookie: a=b
+	Accept-Encoding: gzip, deflate
+	User-Agent: 6666666666
+	
+	数据结束
+	注：该方法优先使用raw的数据，比如headers里面写了User-Agent，raw里面也写了该请求头，优先使用raw里面的，我也不知道哪个是对的，只是跟着感觉走，大概是这样比较合理，如果post里面写了数据，会被raw里面的数据覆盖
+	另外请注意此方法请求的报文，被raw改了！！！
 
 
-请求结束
-是的，这个方法就这么干脆
+
+
+	code,headers,body,jumpurl,allbody=mm.httpraw('http://www.baidu.com','GET / HTTP/1.1\r\n\r\n')
+	请求数据
+	GET / HTTP/1.1
+	
+	
+	请求结束
+	是的，这个方法就这么干脆
 
 
 
