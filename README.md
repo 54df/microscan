@@ -24,11 +24,11 @@ print mm.httpraw('http://www.baidu.com','GET / HTTP/1.1\r\n\r\n')
 就这两种,http和httpraw
 
 返回值和hackhttp很相似，也是5个，分为
-code(int)	返回代码，成功是200这种
-headers(dic)	headers是以字典形式返回的，例{'Cookie':'JSESSIONID=1111111111111111111'}
-body(str)	body为返回正文,例<html>......</html>
-jumpurl(str)	如果返回代码300<=code<=305是会跳转的，该返回值为判断code，然后读headers里面的location
-allbody(str)	allbody是我自己拼接的，尽量像直接返回的socket
+	code(int)	返回代码，成功是200这种
+	headers(dic)	headers是以字典形式返回的，例{'Cookie':'JSESSIONID=1111111111111111111'}
+	body(str)	body为返回正文,例\<html>......\</html>
+	jumpurl(str)	如果返回代码300<=code<=305是会跳转的，该返回值为判断code，然后读headers里面的location
+	allbody(str)	allbody是我自己拼接的，尽量像直接返回的socket
 
 
 
