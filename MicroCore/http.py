@@ -80,10 +80,10 @@ class Microhttp:
                 line = line.strip()
                 if not line:
                     break
-                if line.count(': ') < 1:
+                if line.count(':') < 1:
                     req_headers[up_key] = req_headers.get(up_key, '') + line
                 else:
-                    line = line.split(': ', 1)
+                    line = line.split(':', 1)
                     up_key = line[0]
                     req_headers[line[0]] = line[1]
             # 处理请求实体
@@ -117,7 +117,7 @@ class Microhttp:
         all_body = "HTTP/1.1 " + str(code) + "\r\n"
         for key, value in tmp:
             res_headers[str(key)] = str(value)
-            all_body += (str(key) + ": " + str(value) + "\r\n")
+            all_body += (str(key) + ":" + str(value) + "\r\n")
         jump_url = ''
         if 300 <= code <= 305:
             jump_url = res_headers.get('Location', '')
@@ -161,9 +161,9 @@ class Microhttp:
                 # 如果为一行
                 key = ""
                 value = ""
-                if buffered.count(": "):
+                if buffered.count(":"):
                     # 如果包含键值对
-                    key, value = buffered.split(": ", 10)
+                    key, value = buffered.split(":", 10)
                 else:
                     key = up_key
                     value = buffered
@@ -212,7 +212,7 @@ class Microhttp:
             jump_url = response_mapper.get('Location', "")
         all_body = ver + " " + str(code) + " " + status
         for key in response_mapper:
-            all_body += key + ": " + response_mapper.get(key) + "\r\n"
+            all_body += key + ":" + response_mapper.get(key) + "\r\n"
         all_body += "\r\n" + body
         return code, response_mapper, body, jump_url, all_body
 
