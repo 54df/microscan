@@ -1,6 +1,5 @@
 # coding:utf-8
 import urlparse
-import HTMLParser
 
 
 def is_ip_addr(ip=""):
@@ -36,14 +35,6 @@ def get_url_host(url):
     if ':' in host:
         host = host[:host.find(':')]
     return host
-
-
-def parseHtml(html):
-    pass
-
-
-class URLParserError(Exception):
-    pass
 
 
 def get_url_info(url):
@@ -85,8 +76,11 @@ def get_url_info(url):
                 path = querystring
                 query = ""
         else:
-            hostname = tmp
-            port = getport(scheme)
+            if tmp.count(":") > 0:
+                hostname, port = tmp.split(":", 1)
+            else:
+                hostname = tmp
+                port = getport(scheme)
     else:
         port = "80"
         if url.count("/") > 0:
