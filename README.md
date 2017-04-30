@@ -8,7 +8,7 @@
 
 
 该项目想尽量于2017年末前上线，域名microscan.top，主机还木有，web还木有写。
-<<<<<<< HEAD
+
 
 
 不知道该怎么写文档，就写在这吧。
@@ -23,16 +23,17 @@ print mm.httpraw('http://www.baidu.com','GET / HTTP/1.1\r\n\r\n')
 就这两种,http和httpraw
 
 返回值和hackhttp很相似，也是5个，分为
-code(int)		返回代码，成功是200这种
+code(int)	返回代码，成功是200这种
 headers(dic)	headers是以字典形式返回的，例{'Cookie':'JSESSIONID=1111111111111111111'}
-body(str)		body为返回正文,例"<html>......</html>"
+body(str)	body为返回正文,例<html>......</html>
 jumpurl(str)	如果返回代码300<=code<=305是会跳转的，该返回值为判断code，然后读headers里面的location
 allbody(str)	allbody是我自己拼接的，尽量像直接返回的socket
 
 下面说说http和httpraw的区别
-	httpraw有三个参数(url, raw, timeout=3),和hackhttp一样，raw里面可以直接复制burpsuite抓到的包，和hackhttp不同的地方就是，MicroCore直接用的socket发送数据，比httplib还要底层，这样对用户发送的包也有比较严格的限制，比如content-length，用户要自己手动计算字节数
 
-	http有六个参数(url, post=None, raw=None, headers={}, method=None, cookies={},method=None(通过post或raw判断，默认为GET))，raw参数同样可以发送包，和hackhttp的区别在于，这个raw不是通过调用httpraw的方法实现的，而是自己处理的，会解析请求行，请求头，等等的字段，然后通过httplib来请求
+httpraw有三个参数(url, raw, timeout=3),和hackhttp一样，raw里面可以直接复制burpsuite抓到的包，和hackhttp不同的地方就是，MicroCore直接用的socket发送数据，比httplib还要底层，这样对用户发送的包也有比较严格的限制，比如content-length，用户要自己手动计算字节数
+
+http有六个参数(url, post=None, raw=None, headers={}, method=None, cookies={},method=None(通过post或raw判断，默认为GET))，raw参数同样可以发送包，和hackhttp的区别在于，这个raw不是通过调用httpraw的方法实现的，而是自己处理的，会解析请求行，请求头，等等的字段，然后通过httplib来请求
 
 上面说到底层库，其实不用urllib和urllib2是有原因的，因为这些库在返回错误代码的时候直接就抛异常了，不能看到返回的数据
 
@@ -78,11 +79,5 @@ GET / HTTP/1.1
 
 
 
-
-
-
-
-
-
 =======
->>>>>>> origin/master
+
