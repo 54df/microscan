@@ -15,11 +15,11 @@
 
 打开方式分两种
 
-import MicroCore
-
-mm = MicroCore.Microhttp()
-print mm.http('http://www.baidu.com')
-print mm.httpraw('http://www.baidu.com','GET / HTTP/1.1\r\n\r\n')
+	import MicroCore
+	
+	mm = MicroCore.Microhttp()
+	print mm.http('http://www.baidu.com')
+	print mm.httpraw('http://www.baidu.com','GET / HTTP/1.1\r\n\r\n')
 
 就这两种,http和httpraw
 
