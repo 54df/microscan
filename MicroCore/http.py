@@ -6,6 +6,7 @@ import socket
 import StringIO
 import zlib
 import gzip
+import ssl
 
 
 class RAWException(Exception):
@@ -130,6 +131,8 @@ class Microhttp:
         scheme, host, port, path, query = urlutil.get_url_info(url)
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.settimeout(timeout)
+        if scheme == "https":
+            sock = ssl.wrap_socket(sock)
         sock.connect((host, int(port)))
         sock.sendall(raw)
         response_mapper = {}
@@ -163,7 +166,7 @@ class Microhttp:
                 value = ""
                 if buffered.count(":"):
                     # 如果包含键值对
-                    key, value = buffered.split(":", 10)
+                    key, value = buffered.split(":", 1)
                 else:
                     key = up_key
                     value = buffered
