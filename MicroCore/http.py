@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import httplib
-import url as urlutil
+import util
 import socket
 import StringIO
 import zlib
@@ -10,6 +10,10 @@ import ssl
 
 
 class RAWException(Exception):
+    pass
+
+
+class ProxyException(Exception):
     pass
 
 
@@ -34,11 +38,12 @@ class Microhttp:
         raw = kwargs.get("raw", None)
         headers = kwargs.get('headers', {})
         method = kwargs.get('method')
+        proxy = kwargs.get('proxy', "")
         res_headers = {}
         req_headers = {}
         cookies = kwargs.get('cookies', {})
         method = method if method != None else 'POST' if post != None else 'GET'
-        scheme, host, port, path, query = urlutil.get_url_info(url)
+        scheme, host, port, path, query = util.get_url_info(url)
         req_url = path
         if query:
             req_url += "?" + query
@@ -48,8 +53,6 @@ class Microhttp:
             post = post.encode('utf-8', 'ignore')
         if type(raw) == unicode:
             raw = raw.encode('utf-8', 'ignore')
-        # 编译一个连接
-        conn = self._make_connection(scheme, host, port)
         # 遍历请求头到请求头数组
         for key in headers:
             req_headers[key] = headers.get(key)
@@ -105,8 +108,17 @@ class Microhttp:
                 req_headers.pop('Content-Length')
         req_headers['Accept-Encoding'] = req_headers.get('Accept-Encoding', 'gzip, deflate')
         req_headers['Connection'] = req_headers.get('Connection', 'Keep-Alive')
+        req_headers['Accept'] = req_headers.get("Accept", '*/*')
         req_headers['User-Agent'] = req_headers.get('User-Agent',
                                                     "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.71 Safari/537.36")
+        conn = None
+        if proxy:
+            p_scheme, p_host, p_port, p_path, p_query = util.get_url_info(proxy)
+            conn = self._make_connection(p_scheme, p_host, p_port)
+            conn.set_tunnel(host, port)
+        else:
+            # 编译一个连接
+            conn = self._make_connection(scheme, host, port)
         # 开始请求
         # print method, req_url, post, req_headers
         conn.request(method, req_url, post, req_headers)
@@ -119,6 +131,9 @@ class Microhttp:
         for key, value in tmp:
             res_headers[str(key)] = str(value)
             all_body += (str(key) + ":" + str(value) + "\r\n")
+        body = body if not (
+            res_headers.get('content-encoding') or res_headers.get('Content-Encoding')) else gzip.GzipFile(
+            fileobj=StringIO.StringIO(body)).read()
         jump_url = ''
         if 300 <= code <= 305:
             jump_url = res_headers.get('Location', '')
@@ -128,7 +143,7 @@ class Microhttp:
 
     def httpraw(self, url, raw, timeout=3):
         # 该方法不解析任何数据
-        scheme, host, port, path, query = urlutil.get_url_info(url)
+        scheme, host, port, path, query = util.get_url_info(url)
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.settimeout(timeout)
         if scheme == "https":
@@ -213,6 +228,7 @@ class Microhttp:
         sock.close()
         if 300 <= code <= 305:
             jump_url = response_mapper.get('Location', "")
+            jump_url = jump_url if jump_url else response_mapper.get('location', "")
         all_body = ver + " " + str(code) + " " + status
         for key in response_mapper:
             all_body += key + ":" + response_mapper.get(key) + "\r\n"

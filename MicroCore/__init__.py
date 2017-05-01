@@ -9,6 +9,7 @@ __license__ = 'GPL 2.0'
 __copyright__ = 'Copyright 2017 Guardian'
 
 from http import *
-from url import *
+from util import *
+
 
 
