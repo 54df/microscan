@@ -1,6 +1,6 @@
 # MicroScan
 
-现在的我很菜，在写一个仿Bugscan的项目，这里是我起步的第一步
+现在的我很菜，在写一个仿Bugscan的项目，这里是我起步的第一步，我这个东西不是抄的。。。
 
 发现bug请反馈给我，QQ:1197795981	  邮箱:minisafe@foxmail.com	    非常感谢
 
@@ -22,6 +22,8 @@
 	print mm.httpraw('http://www.baidu.com','GET / HTTP/1.1\r\n\r\n')
 
 就这两种,http和httpraw
+
+test里面有比较详细的栗子
 
 返回值和hackhttp很相似，也是5个，分为
 	
