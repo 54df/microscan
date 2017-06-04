@@ -12,7 +12,7 @@ setup(
     author_email=__author_email__,
     url=__url__,
     license=__license__,
-    package_dir={'MicroCore': 'microcore'},
+    package_dir={'MicroCore': 'MicroCore'},
     packages=['MicroCore'],
     include_package_data=True,
     keywords='http',
